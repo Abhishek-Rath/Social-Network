@@ -4,10 +4,26 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User
+from .models import User, Post
 
 
 def index(request):
+    if request.method == "POST":
+        user = User.objects.get(username = request.user)
+        content = request.POST["content"]
+
+        post = Post()
+        post.user = user
+        post.content = content
+        post.save()
+
+    if request.method == "GET":
+        post = Post.objects.all().order_by('-date')
+        return render(request, "network/index.html", {
+            "posts":post,
+        })
+
+
     return render(request, "network/index.html")
 
 

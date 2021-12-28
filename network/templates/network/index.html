@@ -1,5 +1,25 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    TODO
+    {% if user.is_authenticated %}
+        <div class="container">
+            <form action="{% url 'index' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="content">What's going on?</label>
+                    <textarea class="form-control" id="content" rows="3" name="content"></textarea>
+                </div>
+                <button type="submit" class="btn btn-dark">Post</button>
+            </form>
+        </div>
+    {% endif %}
+
+
+    {% for post in posts %} 
+        <p>{{post.user}}</p>
+        <p>{{post.content}}</p>
+        <p>{{post.date}}</p>
+        <p>{{post.likes}}</p>
+    {% endfor %}
+
 {% endblock %}
