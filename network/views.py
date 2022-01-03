@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse
 
 from .models import User, Post
@@ -16,6 +16,7 @@ def index(request):
         post.user = user
         post.content = content
         post.save()
+        return redirect('index')
 
     if request.method == "GET":
         post = Post.objects.all().order_by('-date')
