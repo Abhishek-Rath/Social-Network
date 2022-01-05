@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
-from .models import User, Post
+from .models import User, Post, Follow
 
 
 def index(request):
@@ -78,3 +78,20 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
+
+
+def profile(request, user):
+    user = User.objects.filter(username = user).first()
+    # to get followers of user get the no. of users who are following the displayed user
+    followers = len(Follow.objects.filter(following = user))
+
+    # TO get following, get no, of users the current user follows
+    following = len(Follow.objects.filter(follower = user))
+
+    posts = Post.objects.all().order_by('-date')
+    return render(request, 'network/profile.html', {
+        "username": user,
+        "followers": followers,
+        "following": following,
+        "posts": posts
+    })

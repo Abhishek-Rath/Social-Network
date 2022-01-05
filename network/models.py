@@ -24,3 +24,11 @@ class Post(models.Model):
 
     def __str__(self):
         return f"User: {self.user} has posted {self.content} on {self.date} having  {self.likes} likes"
+
+
+class Follow(models.Model):
+    follower = models.ForeignKey('User', on_delete = models.CASCADE, related_name = "following")  # no. of users following current user
+    following = models.ForeignKey('User', on_delete = models.CASCADE, related_name = "followers") # no. of users current user follows
+
+    def __str__(self):
+        return f"{self.follower} follows {self.following}"  

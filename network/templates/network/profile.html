@@ -1,0 +1,23 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="user">
+            {{username}}
+        </div>
+        {% if request.user != username %}
+            <button class="btn btn-primary">Follow</button>
+        {% endif %}
+        <div class="follow">
+            <div class="followers">
+                <h3>Followers</h3>
+                {{followers}}
+            </div>
+            <div class="following">
+                <h3>Following</h3>
+                {{following}}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
