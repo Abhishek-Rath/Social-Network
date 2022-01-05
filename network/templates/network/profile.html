@@ -1,25 +1,34 @@
 {% extends "network/layout.html" %}
 
 {% block body %}
-    <div class="container-fluid">
-        <div class="user">
-            {{username}}
-        </div>
-        {% if request.user != username %}
-            <button class="btn btn-primary">Follow</button>
-        {% endif %}
-        <div class="follow">
-            <div class="followers">
-                <h3>Followers</h3>
-                {{followers}}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h2><strong>{{ username }}</strong></h2>
             </div>
-            <div class="following">
-                <h3>Following</h3>
-                {{following}}
+            <div class="col-6"></div>
+            <div class="col">
+                {% if request.user != username %}
+                    <button class="btn btn-primary my-2" style="display: flex; float: right;">Follow</button>
+                {% endif %}
             </div>
         </div>
     </div>
-
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h4> Posts: {{ posts|length }} </h4>                
+            </div>
+            <div class="col">
+                <h4>Followers: {{followers}}</h4> 
+            </div>
+            <div class="col">
+                <h4>Following: {{following}}</h4>  
+            </div>
+        </div>
+        <hr>
+    </div>
     <div class="container my-5">
         {% for post in posts %} 
             <div class="card ">
