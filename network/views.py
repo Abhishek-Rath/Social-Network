@@ -88,7 +88,7 @@ def profile(request, user):
     # TO get following, get no, of users the current user follows
     following = len(Follow.objects.filter(follower = user))
 
-    posts = Post.objects.all().order_by('-date')
+    posts = Post.objects.filter(user = user).order_by('-date')
     return render(request, 'network/profile.html', {
         "username": user,
         "followers": followers,

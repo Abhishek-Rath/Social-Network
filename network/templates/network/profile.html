@@ -20,4 +20,22 @@
         </div>
     </div>
 
+    <div class="container my-5">
+        {% for post in posts %} 
+            <div class="card ">
+                <div class="card-header">
+                    <!-- {{ post.user }} -->
+                    <a href="{% url 'profile' post.user %}">{{post.user.username}}</a>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ post.content }}</h5>
+                </div>
+                <div class="card-footer text-muted" >
+                    <a href="#" class="btn btn-primary" style="float: left;"><span >&#x2764;</span>{{post.likes}}</a>
+                    <span style="float: right;">{{ post.date }}</span>
+                </div>
+            </div>
+            <br><br>
+       {% endfor %}
+    </div>
 {% endblock %}
