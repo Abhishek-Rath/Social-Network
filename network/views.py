@@ -3,6 +3,7 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
+# from django.contrib.auth.decorators import login_required
 
 from .models import User, Post, Follow
 
@@ -94,4 +95,37 @@ def profile(request, user):
         "followers": followers,
         "following": following,
         "posts": posts
+    })
+
+
+# @login_required
+def following(request):
+    if request.method == "POST":
+        user = User.objects.get(username = request.user)
+        content = request.POST["content"]
+
+        post = Post()
+        post.user = user
+        post.content = content
+        post.save()
+     
+    # Get the query set of people the logged in user follows 
+    following_users = Follow.objects.filter(follower = request.user)
+
+    # Get all the posts
+    posts = Post.objects.all().order_by('-date')
+
+    following_user_posts = list()
+
+    for foll_user in following_users:
+        for post in posts:
+            if post.user == foll_user.following:
+                following_user_posts.append(post)
+        # print(foll_user.following.id)
+    # print(following_users)
+    print(following_user_posts)
+
+    return render(request, "network/following.html", {
+        "following_users":following_users,
+        "following_user_posts":following_user_posts
     })
