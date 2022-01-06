@@ -1,0 +1,39 @@
+{% extends "network/layout.html" %} 
+
+{% block body %}
+    <div class="container my-3">
+        <form action="{% url 'index' %}" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label class="h4" for="content">What's going on?</label>
+                <textarea class="form-control" id="content" rows="3" name="content"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Post</button>
+            <br><br>
+        </form>
+    </div>
+    <hr>
+    <!-- {% for people in following_users %}
+        <h3>{{people}}</h3>
+    {% endfor %} -->
+
+    <div class="container my-5">
+        {% for post in following_user_posts %} 
+            <div class="card ">
+                <div class="card-header">
+                    <!-- {{ post.user }} -->
+                    <a href="{% url 'profile' post.user %}">{{post.user.username}}</a>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ post.content }}</h5>
+                </div>
+                <div class="card-footer text-muted" >
+                    <a href="#" class="btn btn-primary" style="float: left;"><span >&#x2764;</span>{{post.likes}}</a>
+                    <span style="float: right;">{{ post.date }}</span>
+                </div>
+            </div>
+            <br><hr><br>
+       {% endfor %}
+    </div>
+
+{% endblock %}
