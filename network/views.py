@@ -3,10 +3,15 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.core.paginator import Paginator
+from django.views.generic import ListView
 # from django.contrib.auth.decorators import login_required
 
 from .models import User, Post, Follow
 
+class PageList(ListView):
+    paginate_by = 2
+    model = Post
 
 def index(request):
     if request.method == "POST":
@@ -20,9 +25,16 @@ def index(request):
         return redirect('index')
 
     if request.method == "GET":
-        post = Post.objects.all().order_by('-date')
+        posts = Post.objects.all().order_by('-date')
+        # posts = Post.objects.get_queryset().order_by('-date')
+
+        paginator = Paginator(posts, 2)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        print("\n\n", page_obj,"\n\n")
         return render(request, "network/index.html", {
-            "posts":post,
+            "posts":posts,
+            'page_obj': page_obj
         })
 
 
