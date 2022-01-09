@@ -152,3 +152,17 @@ def following(request):
         "following_user_posts":following_user_posts,
         "page_obj":page_obj,
     })  
+
+
+@login_required(login_url = 'login')
+def follow(request, user):
+    profile_user = User.objects.get(username = user)
+    current_user = request.user
+   
+
+    print("\n\n",profile_user,"\n\n")
+    print("\n\n",current_user,"\n\n")
+
+    is_following = Follow(follower = current_user, following = profile_user)
+    is_following.save()
+    return redirect('profile', user = profile_user)
