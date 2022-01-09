@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.core.paginator import Paginator
 from django.views.generic import ListView
-# from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required
 
 from .models import User, Post, Follow
 
@@ -102,10 +102,16 @@ def profile(request, user):
     following = len(Follow.objects.filter(follower = user))
 
     posts = Post.objects.filter(user = user).order_by('-date')
+
+    paginator = Paginator(posts, 2)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     return render(request, 'network/profile.html', {
         "username": user,
         "followers": followers,
         "following": following,
+        "page_obj": page_obj,
         "posts": posts
     })
 
@@ -137,7 +143,12 @@ def following(request):
     # print(following_users)
     print(following_user_posts)
 
+    paginator = Paginator(following_user_posts, 2)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     return render(request, "network/following.html", {
         "following_users":following_users,
-        "following_user_posts":following_user_posts
-    })
+        "following_user_posts":following_user_posts,
+        "page_obj":page_obj,
+    })  

@@ -9,7 +9,7 @@
             <div class="col-6"></div>
             <div class="col">
                 {% if request.user != username %}
-                    <button class="btn btn-primary my-2" style="display: flex; float: right;">Follow</button>
+                    <a href="{% url 'follow' username %}" class="btn btn-primary my-2" style="display: flex; float: right;">Follow</a>
                 {% endif %}
             </div>
         </div>
@@ -30,7 +30,7 @@
         <hr>
     </div>
     <div class="container my-5">
-        {% for post in posts %} 
+        {% for post in page_obj %} 
             <div class="card ">
                 <div class="card-header">
                     <!-- {{ post.user }} -->
@@ -47,4 +47,28 @@
             <br><br>
        {% endfor %}
     </div>
+     
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+            <li class="page-item ">
+                <a class="page-link" href="?page=1">&laquo;</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            </li>
+        {% endif %}
+        
+        <li class="current page-item">
+            <span class="page-link" style="color: black;">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        </li>
+
+        {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}"> &raquo;</a>
+            </li>
+        {% endif %}
+      </ul>
 {% endblock %}
