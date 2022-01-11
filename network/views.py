@@ -163,6 +163,23 @@ def follow(request, user):
     print("\n\n",profile_user,"\n\n")
     print("\n\n",current_user,"\n\n")
 
-    is_following = Follow(follower = current_user, following = profile_user)
-    is_following.save()
+    # Current user follows profile user
+    # follow_prof_user = Follow(follower = current_user, following = profile_user)
+    # follow_prof_user.save()
+
+    following = Follow.objects.filter(follower = current_user, following = profile_user)
+
+    # check if not already following
+    if(not following): 
+        # create new follow object
+        follow_obj = Follow.objects.create(follower = current_user, following = profile_user) 
+        
+        # commit to db
+        follow_obj.save() 
+
+        print(f"{current_user} follows {profile_user}")
+    else:
+        following.delete()
+        print(f"{current_user} unfollwed {profile_user}")
     return redirect('profile', user = profile_user)
+    # return HttpResponse("")
