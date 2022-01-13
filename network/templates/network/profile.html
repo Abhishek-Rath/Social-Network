@@ -2,33 +2,95 @@
 
 {% block body %}
     <div class="container">
-        <div class="row">
-            <div class="col">
-                <h2><strong>{{ username }}</strong></h2>
-            </div>
-            <div class="col-6"></div>
-            <div class="col">
-                {% if request.user != username %}
-                    <a href="{% url 'follow' username %}" class="btn btn-primary my-2" style="display: flex; float: right;">Follow</a>
+        <div id="profile">
+            
+        </div>
+    </div>
+    
+    <script type="text/babel">
+        const btnStyle = {
+            display: "flex",
+            float: "right",
+        };
+
+        class Follow extends React.Component {
+            constructor(props) {
+                super(props);
+                {% if follow_state %} 
+                    this.state = {
+                        followState :'Unfollow',
+                        followers: {{ followers }},
+                        following: {{ following }},
+                        class: 'btn btn-danger my-2'
+                    };
+                {% else %} 
+                    this.state = {
+                        followState :'Follow',
+                        followers: {{ followers }},
+                        following: {{ following }},
+                        class: 'btn btn-primary my-2'
+                    };
                 {% endif %}
-            </div>
-        </div>
-    </div>
-    <br>
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <h4> Posts: {{ posts|length }} </h4>                
-            </div>
-            <div class="col">
-                <h4>Followers: {{followers}}</h4> 
-            </div>
-            <div class="col">
-                <h4>Following: {{following}}</h4>  
-            </div>
-        </div>
-        <hr>
-    </div>
+                
+            }
+            
+            updateFollowButton = () => {
+                // console.log(this.state.followState); // current state of follow button
+                if (this.state.followState == 'Follow') {
+                    fetch("/follow/{{ username }}/{{ user }}");
+                    this.setState((prevState) => ({
+                        followers: prevState.followers + 1,
+                        followState: "Unfollow",
+                        class: 'btn btn-danger my-2'
+                    }));
+                } else {
+                    fetch("/follow/{{ username }}/{{ user }}");
+                    this.setState((prevState) => ({
+                        followers: prevState.followers - 1,
+                        followState: "Follow",
+                        class: 'btn btn-primary my-2'
+                    }));
+                }
+            };
+        
+            render() {
+                return (
+                    <> 
+                        <div className="row">
+                            <div className="col">
+                                <h2><strong>{{ username }}</strong></h2>
+                            </div>
+                            <div className="col-6"></div>
+                            <div className="col">
+                                {% if request.user != username %}                                
+                                        <button onClick={ this.updateFollowButton } className={ this.state.class } style={ btnStyle }>{this.state.followState}</button>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <br/>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col">
+                                    <h4> Posts: {{ posts|length }} </h4>                
+                                </div>
+                                <div class="col">
+                                    <h4>Followers: { this.state.followers }</h4> 
+                                </div>
+                                <div class="col">
+                                    <h4>Following: { this.state.following }</h4>  
+                                </div>
+                            </div>
+                            <hr />
+                        </div>
+                    </>
+                );
+            }
+        };
+        
+        ReactDOM.render(<Follow />, document.querySelector('#profile'));
+    </script>
+
+    
     <div class="container my-5">
         {% for post in page_obj %} 
             <div class="card ">
