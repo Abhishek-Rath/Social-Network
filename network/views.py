@@ -28,7 +28,7 @@ def index(request):
         posts = Post.objects.all().order_by('-date')
         # posts = Post.objects.get_queryset().order_by('-date')
 
-        paginator = Paginator(posts, 2)
+        paginator = Paginator(posts, 3)
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
         print("\n\n", page_obj,"\n\n")
@@ -104,7 +104,7 @@ def profile(request, user):
 
     posts = Post.objects.filter(user = profile_user).order_by('-date')
 
-    paginator = Paginator(posts, 2)
+    paginator = Paginator(posts, 3)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -163,7 +163,7 @@ def following(request):
     # print(following_users)
     print(following_user_posts)
 
-    paginator = Paginator(following_user_posts, 2)
+    paginator = Paginator(following_user_posts, 3)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 

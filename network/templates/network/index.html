@@ -21,7 +21,7 @@
             <div class="card ">
                 <div class="card-header">
                     <!-- {{ post.user }} -->
-                    <a href="{% url 'profile' post.user %}">{{post.user.username}}</a>
+                    <a href="{% url 'profile' post.user %}">{{post.user.username}} <i class="fa fa-edit" style="float: right;"></i></a>
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">{{ post.content }}</h5>
