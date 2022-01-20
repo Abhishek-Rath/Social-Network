@@ -6,7 +6,7 @@
             <form action="{% url 'index' %}" method="post">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label class="h4" for="content">What's going on?</label>
+                    <label class="h4" for="content" style="color: azure;">What's going on?</label>
                     <textarea class="form-control" id="content" rows="3" name="content"></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary">Post</button>
@@ -21,7 +21,12 @@
             <div class="card ">
                 <div class="card-header">
                     <!-- {{ post.user }} -->
-                    <a href="{% url 'profile' post.user %}">{{post.user.username}} <i class="fa fa-edit" style="float: right;"></i></a>
+                    <a href="{% url 'profile' post.user %}">{{post.user.username}}</a>
+                   {% if post.user == request.user %}
+                        <a href="{% url 'edit' post.id %}" style="float: right; cursor: pointer;">
+                            <i class="fa fa-edit" ></i>
+                        </a>
+                   {% endif %}
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">{{ post.content }}</h5>

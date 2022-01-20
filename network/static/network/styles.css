@@ -7,6 +7,13 @@
 body {
     /* background-color: #0c0c0cd0; */
     background-image: url('ninja.jpeg');
+    /* Full height */
+    /* height: 100%; */
+
+    /* Center and scale the image nicely */
+    /* background-position: center; */ */
+    /* background-repeat: no-repeat; */
+     /* background-size: cover; */
 }
 
 .card-header, .card-footer {

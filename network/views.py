@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.core.paginator import Paginator
 from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
-
+from django.http import JsonResponse
 from .models import User, Post, Follow
 
 class PageList(ListView):
@@ -204,5 +204,21 @@ def follow(request, user, curr_user):
         else:
             following.delete()
             print(f"{current_user} unfollwed {profile_user}")
-        # return redirect('profile', user = profile_user)
         return HttpResponse("")
+
+
+def edit(request, id):
+    post = Post.objects.get(id = id)
+    if request.method == "GET":
+        return render(request, "network/edit.html",  {
+            "post":post,
+        })
+    
+    if request.method == "POST":
+        post.content = request.POST['content']
+        post.save()
+        
+    
+    return redirect('index')
+    
+
