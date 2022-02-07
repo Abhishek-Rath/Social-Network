@@ -7,7 +7,9 @@ from django.core.paginator import Paginator
 from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from .models import User, Post, Follow
+from .models import *
+import json
+from django.views.decorators.csrf import csrf_exempt
 
 class PageList(ListView):
     paginate_by = 2
@@ -24,21 +26,20 @@ def index(request):
         post.save()
         return redirect('index')
 
-    if request.method == "GET":
-        posts = Post.objects.all().order_by('-date')
-        # posts = Post.objects.get_queryset().order_by('-date')
+    
+    posts = Post.objects.all().order_by('-date')
+    
+    # Pagination
+    paginator = Paginator(posts, 3)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
-        paginator = Paginator(posts, 3)
-        page_number = request.GET.get('page')
-        page_obj = paginator.get_page(page_number)
-        print("\n\n", page_obj,"\n\n")
-        return render(request, "network/index.html", {
-            "posts":posts,
-            'page_obj': page_obj
-        })
+    print("\n\n", page_obj,"\n\n")
 
-
-    return render(request, "network/index.html")
+    return render(request, "network/index.html", {
+        "posts":posts,
+        "page_obj": page_obj,
+})
 
 
 def login_view(request):
@@ -92,7 +93,7 @@ def register(request):
     else:
         return render(request, "network/register.html")
 
-
+@login_required
 def profile(request, user):
     profile_user = User.objects.filter(username = user).first()
     current_user = request.user
@@ -179,18 +180,13 @@ def follow(request, user, curr_user):
     profile_user = User.objects.get(username = user)
     current_user = User.objects.get(username = curr_user)
    
-
     print("\n\n",profile_user,"\n\n")
     print("\n\n",current_user,"\n\n")
 
-    # Current user follows profile user
-    # follow_prof_user = Follow(follower = current_user, following = profile_user)
-    # follow_prof_user.save()
 
     if(profile_user != current_user):
 
         following = Follow.objects.filter(follower = current_user, following = profile_user)
-        follow_state = False
 
         # check if not already following
         if(not following): 
@@ -203,7 +199,7 @@ def follow(request, user, curr_user):
             print(f"{current_user} follows {profile_user}")
         else:
             following.delete()
-            print(f"{current_user} unfollwed {profile_user}")
+            print(f"{current_user} unfollowed {profile_user}")
         return HttpResponse("")
 
 
@@ -221,4 +217,35 @@ def edit(request, id):
     
     return redirect('index')
     
+@csrf_exempt
+def like(request):
+    user = request.user
+    if user.is_authenticated and request.method == "POST":
+        post_id = request.POST.get('id')
+        post_liked = request.POST.get('like_status')
+        print(post_liked, post_id)
+        post = Post.objects.get(id = post_id)
 
+        try:
+            
+            if post_liked == 'unliked':
+                post.likes.add(user)
+                # post.save()
+                print(post.likes.count())
+                post_liked = "liked"
+            
+            else:
+                post.likes.remove(user)
+                # post.save()
+                print(post.likes.count())
+                post_liked = "unliked"
+            return JsonResponse({
+                    'status': 201,
+                    'post_liked': post_liked,
+                    'likes_count': post.likes.count()
+                })
+        except:
+                return JsonResponse({'error': "Post not found", "status": 404})              
+        
+        
+        return JsonResponse({}, status=400)    

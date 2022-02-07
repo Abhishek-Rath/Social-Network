@@ -1,4 +1,5 @@
 {% extends "network/layout.html" %}
+{% load static %}
 
 {% block body %}
     {% if user.is_authenticated %}
@@ -6,7 +7,7 @@
             <form action="{% url 'index' %}" method="post">
                 {% csrf_token %}
                 <div class="form-group">
-                    <label class="h4" for="content" style="color: azure;">What's going on?</label>
+                    <label class="h4" for="content">What's going on?</label>
                     <textarea class="form-control" id="content" rows="3" name="content"></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary">Post</button>
@@ -17,13 +18,13 @@
 
     <div class="container my-5">
         {% for post in page_obj %} 
+            <!-- <h5>{{post.likes.all}}</h5> -->
             <!-- Every post is Post model object -->
-            <div class="card ">
+            <div class="card">
                 <div class="card-header">
-                    <!-- {{ post.user }} -->
                     <a href="{% url 'profile' post.user %}">{{post.user.username}}</a>
                    {% if post.user == request.user %}
-                        <a href="{% url 'edit' post.id %}" style="float: right; cursor: pointer;">
+                            <a href="{% url 'edit' post.id %}" style="float: right; cursor: pointer;">
                             <i class="fa fa-edit" ></i>
                         </a>
                    {% endif %}
@@ -32,7 +33,44 @@
                     <h5 class="card-title">{{ post.content }}</h5>
                 </div>
                 <div class="card-footer text-muted" >
-                    <a href="#" class="btn btn-primary" style="float: left;"><span >&#x2764;</span>{{post.likes}}</a>
+                    {% if request.user in post.likes.all  %}
+                        <button 
+                            id="post-likes-{{post.id}}"
+                            data-like-status="liked"
+                            data-id="{{post.id}}"
+                            class="like-post" 
+                            style="float: left; cursor: pointer; border: none; outline: none;">
+                            <i class="em em-heart" aria-role="presentation" aria-label="HEAVY BLACK HEART"></i>
+                        </button>
+                    {% else %}
+                    <button     
+                        id="post-likes-{{post.id}}"
+                        data-like-status="unliked"
+                        data-id="{{post.id}}"
+                        class="like-post" 
+                        style="float: left; cursor: pointer; border: none;"
+                    >	
+                    &#129293;</button>
+                    {% endif %}
+                    
+                    <!-- <img 
+                        class="like-post"
+                        id="post-likes-{{post.id}}"
+                        data-id="{{post.id}}"
+                        
+                        {% if request.user in post.likes.all  %}
+                            
+                            data-like-status="liked"
+                            src="https://img.icons8.com/carbon-copy/100/000000/like.png"
+                        {% else %}
+                            data-like-status="unliked"
+                            src="https://img.icons8.com/plasticine/100/000000/like--v2.png"
+                        {% endif %}
+
+                        style="float: left; cursor: pointer;"
+                     /> -->
+                    <span id="post-likes-count-{{post.id}}">{{ post.likes.count }}</span>
+                    
                     <span style="float: right;">{{ post.date }}</span>
                 </div>
             </div>
@@ -65,4 +103,5 @@
             </li>
         {% endif %}
       </ul>
+      <script src="{% static 'network/like.js' %}"></script>
 {% endblock %}
