@@ -19,11 +19,10 @@ class Post(models.Model):
     user = models.ForeignKey('User', on_delete = models.CASCADE, related_name = "author")
     content = models.CharField(max_length = 255)
     date = models.DateTimeField(default = timezone.now)
-    likes = models.IntegerField(default = 0)
-
+    likes = models.ManyToManyField('User', related_name = "users_who_liked", default = None)
 
     def __str__(self):
-        return f"User: {self.user} has posted {self.content} on {self.date} having  {self.likes} likes"
+        return f"User: {self.user} has posted {self.content} on {self.date} having  {self.likes.count()} likes"
 
 
 class Follow(models.Model):
