@@ -1,4 +1,5 @@
 {% extends "network/layout.html" %}
+{% load static %}
 
 {% block body %}
     <div class="container">
@@ -102,7 +103,26 @@
                     <h5 class="card-title">{{ post.content }}</h5>
                 </div>
                 <div class="card-footer text-muted" >
-                    <a href="#" class="btn btn-primary" style="float: left;"><span >&#x2764;</span>{{post.likes}}</a>
+                    {% if request.user in post.likes.all  %}
+                        <button 
+                            id="post-likes-{{post.id}}"
+                            data-like-status="liked"
+                            data-id="{{post.id}}"
+                            class="like-post" 
+                            style="float: left; cursor: pointer; border: none; outline: none;">
+                            <i class="em em-heart" aria-role="presentation" aria-label="HEAVY BLACK HEART"></i>
+                        </button>
+                    {% else %}
+                        <button     
+                            id="post-likes-{{post.id}}"
+                            data-like-status="unliked"
+                            data-id="{{post.id}}"
+                            class="like-post" 
+                            style="float: left; cursor: pointer; border: none;"
+                        >	
+                        &#129293;</button>
+                    <span id="post-likes-count-{{post.id}}">{{ post.likes.count }}</span>
+                    {% endif %}
                     <span style="float: right;">{{ post.date }}</span>
                 </div>
             </div>
@@ -133,4 +153,5 @@
             </li>
         {% endif %}
       </ul>
+      <script src="{% static 'network/like.js' %}"></script>
 {% endblock %}
