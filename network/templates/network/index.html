@@ -23,10 +23,23 @@
             <div class="card">
                 <div class="card-header">
                     <a href="{% url 'profile' post.user %}">{{post.user.username}}</a>
-                   {% if post.user == request.user %}
-                            <a href="{% url 'edit' post.id %}" style="float: right; cursor: pointer;">
+                    {% if post.user.id == request.user.id %}
+                        <ul class="icons">
+                            <li>
+                                <a href="{% url 'edit' post.id %}">
+                                    <i class="fa fa-edit" ></i>
+                                </a>
+                           </li>
+                           <li> 
+                               <a href="#">
+                                <i class="material-icons" style="font-size: 17px; color: red;">delete</i>
+                               </a>
+                            </li>
+                        </ul>
+                        <!-- <a href="{% url 'edit' post.id %}" style="float: right; cursor: pointer;">
                             <i class="fa fa-edit" ></i>
                         </a>
+                        <i class="material-icons" style="font-size: 19px; cursor: pointer;">delete</i> -->
                    {% endif %}
                 </div>
                 <div class="card-body">
@@ -48,7 +61,7 @@
                         data-like-status="unliked"
                         data-id="{{post.id}}"
                         class="like-post" 
-                        style="float: left; cursor: pointer; border: none;"
+                        style="float: left; cursor: pointer; border: none; outline: none;"
                     >	
                     &#129293;</button>
                     {% endif %}

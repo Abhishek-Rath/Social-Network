@@ -7,5 +7,15 @@
 .card-header, .card-footer {
     /* background-color: rgb(247, 199, 240); */
     background-color: rgb(237 225 235);
+}
 
+.icons {
+    display: flex;
+    list-style-type: none;
+    float: right;
+    cursor: pointer;
+}
+
+.fa-edit {
+    padding-right: 8px;
 }
