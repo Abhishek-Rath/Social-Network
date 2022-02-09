@@ -249,3 +249,9 @@ def like(request):
         
         
         return JsonResponse({}, status=400)    
+
+
+def delete(request, id):
+    post = Post.objects.get(pk = id)
+    post.delete()
+    return redirect("index")

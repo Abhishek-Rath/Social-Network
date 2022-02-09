@@ -26,12 +26,12 @@
                     {% if post.user.id == request.user.id %}
                         <ul class="icons">
                             <li>
-                                <a href="{% url 'edit' post.id %}">
+                                <button class="edit-post" data-id="{{post.id}}" href="{% url 'edit' post.id %}">
                                     <i class="fa fa-edit" ></i>
-                                </a>
+                                </button>
                            </li>
                            <li> 
-                               <a href="#">
+                               <a href="{% url 'delete' post.id %}">
                                 <i class="material-icons" style="font-size: 17px; color: red;">delete</i>
                                </a>
                             </li>
@@ -42,7 +42,7 @@
                         <i class="material-icons" style="font-size: 19px; cursor: pointer;">delete</i> -->
                    {% endif %}
                 </div>
-                <div class="card-body">
+                <div class="card-body" id="post-id-{{post.id}}">
                     <h5 class="card-title">{{ post.content }}</h5>
                 </div>
                 <div class="card-footer text-muted" >
@@ -117,4 +117,5 @@
         {% endif %}
       </ul>
       <script src="{% static 'network/like.js' %}"></script>
+      <script src="{% static 'network/edit.js' %}"></script>
 {% endblock %}
