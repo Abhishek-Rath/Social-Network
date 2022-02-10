@@ -118,11 +118,11 @@
                             data-like-status="unliked"
                             data-id="{{post.id}}"
                             class="like-post" 
-                            style="float: left; cursor: pointer; border: none;"
+                            style="float: left; cursor: pointer; border: none; outline: none;"
                         >	
                         &#129293;</button>
-                    <span id="post-likes-count-{{post.id}}">{{ post.likes.count }}</span>
                     {% endif %}
+                    <span id="post-likes-count-{{post.id}}">{{ post.likes.count }}</span>
                     <span style="float: right;">{{ post.date }}</span>
                 </div>
             </div>
