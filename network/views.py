@@ -202,20 +202,36 @@ def follow(request, user, curr_user):
             print(f"{current_user} unfollowed {profile_user}")
         return HttpResponse("")
 
-
-def edit(request, id):
-    post = Post.objects.get(id = id)
-    if request.method == "GET":
-        return render(request, "network/edit.html",  {
-            "post":post,
-        })
+# Implementation of edit post with page reload
+# def edit(request, id):
+#     post = Post.objects.get(id = id)
+#     if request.method == "GET":
+#         return render(request, "network/edit.html",  {
+#             "post":post,
+#         })
     
-    if request.method == "POST":
-        post.content = request.POST['content']
-        post.save()
+#     if request.method == "POST":
+#         post.content = request.POST['content']
+#         post.save()
         
     
-    return redirect('index')
+#     return redirect('index')
+
+
+def edit(request):
+    if request.method == "POST":
+        post_id = request.POST.get('id')
+        new_post_content = request.POST.get('newPost')
+        print(post_id, new_post_content)
+        post = Post.objects.get(id = post_id)
+        print(post)
+        
+        if post.user == request.user:
+            post.content = new_post_content.strip()
+            post.save()
+            return JsonResponse({'status': 201,})    
+
+        return JsonResponse({}, status=400)
     
 @csrf_exempt
 def like(request):

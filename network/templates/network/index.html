@@ -26,7 +26,7 @@
                     {% if post.user.id == request.user.id %}
                         <ul class="icons">
                             <li>
-                                <button class="edit-post" data-id="{{post.id}}" href="{% url 'edit' post.id %}">
+                                <button class="edit-post" data-id="{{post.id}}">
                                     <i class="fa fa-edit" ></i>
                                 </button>
                            </li>
@@ -36,14 +36,12 @@
                                </a>
                             </li>
                         </ul>
-                        <!-- <a href="{% url 'edit' post.id %}" style="float: right; cursor: pointer;">
-                            <i class="fa fa-edit" ></i>
-                        </a>
-                        <i class="material-icons" style="font-size: 19px; cursor: pointer;">delete</i> -->
                    {% endif %}
                 </div>
-                <div class="card-body" id="post-id-{{post.id}}">
-                    <h5 class="card-title">{{ post.content }}</h5>
+                <div class="card-body" >
+                    <h5 id="post-id-{{post.id}}" class="card-title">{{ post.content }}</h5>
+                    <textarea data-post-edited-id="{{post.id}}" id="post-edit-{{post.id}}" style="display:none;" class="form-control textarea" row="3">{{post.content}}</textarea>
+                    <button id="edit-btn-{{post.id}}" class="btn btn-primary my-2" style="display: none;">Save</button>
                 </div>
                 <div class="card-footer text-muted" >
                     {% if request.user in post.likes.all  %}
@@ -117,5 +115,5 @@
         {% endif %}
       </ul>
       <script src="{% static 'network/like.js' %}"></script>
-      <script src="{% static 'network/edit.js' %}"></script>
+      <script type="module" src="{% static 'network/edit.js' %}"></script>
 {% endblock %}
