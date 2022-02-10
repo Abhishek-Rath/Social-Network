@@ -9,13 +9,23 @@
     background-color: rgb(237 225 235);
 }
 
+/* Delete & Edit icons */
 .icons {
     display: flex;
     list-style-type: none;
     float: right;
     cursor: pointer;
+    margin: 0;
 }
 
 .fa-edit {
     padding-right: 8px;
+}
+
+/* edit button */
+.edit-post {
+    border: none;
+    outline: none;
+    background-color: rgb(237 225 235);
+    color: blue;
 }
