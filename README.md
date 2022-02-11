@@ -2,6 +2,8 @@
 
 ## A Twitter-like social network website for making posts and following users.
 
+## Project Demo- https://youtu.be/18okzRaquDo
+
 ### Link to project description - https://cs50.harvard.edu/web/2020/projects/4/network/
 
 ## Specifications
@@ -19,3 +21,5 @@
 6. **Edit Post:-** Users can edit their own post, without reloading the entire webpage.
 
 7. **Like and Unlike:-** Users can like/unlike their as well others' posts.
+
+8. **Delete Post:-** Users can delete their own posts.
